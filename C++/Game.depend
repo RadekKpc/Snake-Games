@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1546696876 source:c:\users\radek\documents\codeblock\game\main.cpp
+	<iostream>
+	<cstdlib>
+	<windows.h>
+	<deque>
+	<conio.h>
+	<time.h>
+

@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+
+<html lang="pl">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Snake made by RadekKpc</title>
+	
+
+	
+	<link rel="stylesheet" href="style.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	
+	<script type="text/javascript">
+	
+	
+		function Part(x, y) {
+			this.y = y;
+			this.x = x;
+			}
+		
+		function inicialization()
+		{
+		
+		document.getElementById('console').innerHTML="Uzyj strzalek aby sie poruszac! GitHub: RadekKpc";
+		
+		direction=1;
+		hx=hy=100;
+		scale=20;
+		tail=[];
+		apple=[];
+		obstacle=[];
+		ltail=3;
+		score=0;
+		flaga=true;
+		lapple=10;
+		lobstacle=38;
+		
+		tail[0]= new Part(hx+scale,hy);
+		apple[0]= new Part();
+		obstacle[0]= new Part(300,120);
+		
+		for(var i=1;i<ltail;i++){
+		tail[i]=new Part(tail[i-1].x+scale,tail[i-1].y);
+		}
+		
+		for(var i=1;i<lobstacle;i++){
+		if(i!=lobstacle/2)obstacle[i]=new Part(obstacle[i-1].x,obstacle[i-1].y+scale);
+		if(i==lobstacle/2)obstacle[i]=new Part(700,120);
+		
+		}
+		
+		for(var i=0;i<lapple;i++){
+		apple[i]=new Part;
+		rand_apple(i);
+		}
+		
+		
+		}
+		
+		
+		function load(){
+		
+		image = new Image();
+		image.src="teksture/snake_body.png";
+
+		apple_image = new Image();
+		apple_image.src="teksture/apple.png";
+		
+		bg= new Image();
+		bg.src="teksture/bg.jpg";
+		
+		bg_up= new Image();
+		bg_up.src="teksture/bg_up.jpg";
+		
+		bg_left= new Image();
+		bg_left.src="teksture/bg_left.jpg";
+		
+		bg_down= new Image();
+		bg_down.src="teksture/bg_down.jpg";
+		
+		bg_right= new Image();
+		bg_right.src="teksture/bg_right.jpg";
+		
+		bg_ld= new Image();
+		bg_ld.src="teksture/bg_ld.jpg";
+		
+		bg_lu= new Image();
+		bg_lu.src="teksture/bg_lu.jpg";
+		
+		bg_ru= new Image();
+		bg_ru.src="teksture/bg_ru.jpg";
+		
+		bg_rd= new Image();
+		bg_rd.src="teksture/bg_rd.jpg";
+		
+		snake_head_up = new Image();
+		snake_head_up.src="teksture/head_up.png";
+		
+		snake_head_right = new Image();
+		snake_head_right.src="teksture/head_right.png";
+		
+		snake_head_down = new Image();
+		snake_head_down.src="teksture/head_down.png";
+		
+		snake_head_left = new Image();
+		snake_head_left.src="teksture/head_left.png";
+		
+		snake_head = new Image();
+		snake_head.src="teksture/head_left.png";
+		
+		obst= new Image();
+		obst.src="teksture/obstacle.png";
+		
+		
+		inicialization();
+		canvas=document.getElementById("gc");
+		ctx=canvas.getContext("2d");
+		
+		plansza();
+		
+		document.getElementById("container").addEventListener('click' ,plansza3);
+		
+		document.addEventListener('keydown' ,klawiatura);
+		
+		game = setInterval(refresch,70);
+		app = setInterval(apple,5000);
+		
+		
+		}
+		
+		function plansza(){
+		document.getElementById("plansza").style['background-color'] = "green";
+		//timer2 = setTimeout("plansza2()" , 500);
+		}
+		
+		function plansza2(){
+		document.getElementById("plansza").style['background-color'] = "blue";
+		timer1 = setTimeout("plansza()" , 500);
+		}
+		
+		function plansza3(){
+		var timer3;
+		clearTimeout(timer3);
+		document.getElementById("plansza").style['background-color'] = "red";
+		timer3 = setTimeout("plansza()" , 500);
+		}
+		
+		function refresch(){
+			dir();
+			if(flaga)draw();
+			}
+	
+		function dir(){
+			
+			for(var i=tail.length-1;i>0;i--)
+			{
+			tail[i].x=tail[i-1].x;
+			tail[i].y=tail[i-1].y;
+			}
+			tail[0].x=hx;
+			tail[0].y=hy;
+			
+			switch(direction){
+				case 1:
+					hx-=scale;
+					if(hx<0)hx=canvas.width-scale;
+					snake_head=snake_head_left;
+					break; 
+				case 2:
+					hy-=scale;
+					if(hy<0)hy=canvas.height-scale;
+					snake_head=snake_head_up;
+					break;
+				case 3:
+					hx+=scale;
+					if(hx>canvas.width-scale)hx=0;
+					snake_head=snake_head_right;
+					break;
+				case 4:
+					hy+=scale;
+					if(hy>canvas.height-scale)hy=0
+					snake_head=snake_head_down;
+					break;
+				case 5:
+					inicialization();
+					flaga=true;
+					break;
+			
+			}
+			
+			}
+			
+		function draw(){
+			
+			if(flaga){
+			if(false)//hx<0 || hy<0 || hx>canvas.width-scale || hy>canvas.height-scale)
+				{
+				gameOver();
+				}
+			else
+			{	
+				flaga=true;
+				for(var i=0;i<tail.length;i++)
+				{
+					if(hx==tail[i].x && hy==tail[i].y){
+					gameOver();
+					
+					}
+				}
+				for(var i=0;i<obstacle.length;i++)
+				{
+					if(hx==obstacle[i].x && hy==obstacle[i].y){
+					gameOver();
+					
+					}
+				}
+				if(flaga){
+				
+				document.getElementById("plansza").innerHTML="Score: "+score;
+				
+				//ctx.fillStyle = 'rgb(200,200,200)';
+				//ctx.fillRect(0,0,canvas.width,canvas.height);
+				
+				for(var i=0;i<=canvas.width-scale;i+=20)
+					for(var j=0;j<=canvas.height-scale;j+=20)
+						ctx.drawImage(bg,i,j);
+					
+				for(var i=0;i<=canvas.width-scale;i+=20)
+					ctx.drawImage(bg_up,i,0);
+					
+				for(var i=0;i<=canvas.width-scale;i+=20)
+					ctx.drawImage(bg_down,i,canvas.height-scale);
+					
+				for(var i=0;i<=canvas.height-scale;i+=20)
+					ctx.drawImage(bg_left,0,i);
+					
+				for(var i=0;i<=canvas.height-scale;i+=20)
+					ctx.drawImage(bg_right,canvas.width-scale,i);
+				
+				ctx.drawImage(bg_lu,0,0);
+				ctx.drawImage(bg_ld,0,canvas.height-scale);
+				ctx.drawImage(bg_ru,canvas.width-scale,0);
+				ctx.drawImage(bg_rd,canvas.width-scale,canvas.height-scale);
+				
+				for(var i=0;i<lobstacle;i++)
+					ctx.drawImage(obst,obstacle[i].x,obstacle[i].y)
+				
+				//ctx.fillStyle = 'rgb(0,200,0)';
+				//ctx.fillRect(hx,hy,scale-2,scale-2);
+					ctx.drawImage(snake_head,hx,hy);
+				for(var i =0;i<tail.length;i++)
+					{
+						//ctx.fillStyle = 'rgb(0,250,0)';
+						ctx.drawImage(image,tail[i].x,tail[i].y);
+						//ctx.fillRect(tail[i].x,tail[i].y,scale-2,scale-2);
+					}
+							
+				for(var i =0;i<apple.length;i++)
+					{
+						//ctx.fillStyle = 'rgb(200,0,0)';
+						//ctx.fillRect(apple[i].x,apple[i].y,scale-2,scale-2);
+						ctx.drawImage(apple_image,apple[i].x,apple[i].y);
+					}
+				for(var i =0;i<apple.length;i++){
+				if(hx==apple[i].x && hy==apple[i].y)
+				{	
+					tail.push(new Part(-20,-20));
+					rand_apple(i);
+					//document.getElementById('console').innerHTML=" sss ";
+					score+=100;
+					
+				}
+				}
+				}
+				
+				
+			}
+			}
+			
+			}
+			
+		
+		
+		
+		function rand_apple(i)
+		{	
+			
+			flaga = true;
+			apple[i].x=Math.floor((Math.random()*50))*scale;
+			apple[i].y=Math.floor((Math.random()*30))*scale;
+				
+			for(var j =0;j<tail.length && flaga;j++)
+				{
+					if(apple[i].x == tail[j].x && apple[i].y == tail[j].y)
+					flaga=false;
+				}
+			for(var j =0;j<obstacle.length && flaga;j++)
+				{
+					if(apple[i].x == obstacle[j].x && apple[i].y == obstacle[j].y)
+					flaga=false;
+				}
+			if(!flaga)rand_apple(i);
+			
+			
+		}
+		
+		function klawiatura()
+		{	
+			
+			
+			if(event.keyCode==37)
+				{
+				if(direction!=3)direction=1;
+				plansza3();
+				
+				}
+			if(event.keyCode==38)
+				{
+			
+				if(direction!=4)direction=2;
+				plansza3();
+				}
+			if(event.keyCode==39){
+				if(direction!=1)direction=3;
+				plansza3();
+				}
+			if(event.keyCode==40)
+			{
+				if(direction!=2)direction=4;
+				plansza3();
+			}
+			if(event.keyCode==32 && !flaga)
+				{	
+					plansza3();
+					direction=5;
+				}
+			
+		}
+		
+		function gameOver()
+		{
+			document.getElementById('console').innerHTML=" Nacisnij Spacje aby kontynuowac ";
+			flaga=false;
+			
+		}
+		
+	
+	</script>
+	
+</head>
+
+<body onload="load()">
+<canvas id="gc" width="1000" height="600" ></canvas>
+	<div id="container">
+		<div id="plansza">
+
+	
+		</div>
+		<div id="console" ></div>
+		
+	</div>
+	
+
+</body>
+</html>

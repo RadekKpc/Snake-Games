@@ -1,0 +1,17 @@
+#plansza
+{
+	width: 200px;
+	height: 35px;
+	overflow: hidden;
+	color: white;
+	font-size: 30px;
+}
+
+#console
+{
+	width: 200;
+	height: 35px;
+	
+	font-size: 30px;
+	
+}
